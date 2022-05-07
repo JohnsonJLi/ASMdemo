@@ -31,5 +31,34 @@ open class DoubleTabConfig {
 
         @JvmField
         var ByteCodeInjectAnnotationName = ""
+
+        @JvmField
+        val hookPoints = listOf(
+                DoubleTapHookPoint(
+                        interfaceName = "android/view/View\$OnClickListener",
+                        methodName = "onClick",
+                        methodSign = "onClick(Landroid/view/View;)V"
+                ),
+                DoubleTapHookPoint(
+                        interfaceName = "com/chad/library/adapter/base/BaseQuickAdapter\$OnItemClickListener",
+                        methodName = "onItemClick",
+                        methodSign = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
+                ),
+                DoubleTapHookPoint(
+                        interfaceName = "com/chad/library/adapter/base/BaseQuickAdapter\$OnItemChildClickListener",
+                        methodName = "onItemChildClick",
+                        methodSign = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
+                )
+        )
     }
+}
+
+data class DoubleTapHookPoint(
+        val interfaceName: String,
+        val methodName: String,
+        val methodSign: String
+) {
+
+    val interfaceSignSuffix = "L$interfaceName;"
+
 }

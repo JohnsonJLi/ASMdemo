@@ -19,7 +19,7 @@ fun ClassNode.lambdaHelper(isStatic: Boolean = false, block: (InvokeDynamicInsnN
     val lambdaMethodNodes = mutableListOf<MethodNode>()
     methods?.forEach { method ->
         method?.instructions?.iterator()?.forEach {
-            Log.info("????>>>>>  lambdaHelper:${it}")
+//            Log.info("????>>>>>  lambdaHelper:${it}")
             if (it is InvokeDynamicInsnNode) {
                 if (block.invoke(it)) {
                     //   Log.info("dynamicName:${it.name} dynamicDesc:${it.desc}")
@@ -46,10 +46,10 @@ fun ClassNode.lambdaHelper(isStatic: Boolean = false, block: (InvokeDynamicInsnN
             }
         }
     }
-    lambdaMethodNodes.forEach {
-
-        Log.info("????>>>>>  lambdaName:${it.name} lambdaDesc:${it.desc} lambdaAccess:${it.access}")
-    }
+//    lambdaMethodNodes.forEach {
+//
+//        Log.info("????>>>>>  lambdaName:${it.name} lambdaDesc:${it.desc} lambdaAccess:${it.access}")
+//    }
     return lambdaMethodNodes
 
 }
