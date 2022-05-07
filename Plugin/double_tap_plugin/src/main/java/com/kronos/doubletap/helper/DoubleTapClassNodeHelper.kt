@@ -76,8 +76,9 @@ class DoubleTapClassNodeHelper : AsmHelper {
     }
 
     private fun MethodNode.isExcept(): Boolean {
+        val annotationName = String.format("L%s;", DoubleTabConfig.ByteCodeInjectAnnotationName)
         this.visibleAnnotations?.forEach { annotation ->
-            if (annotation.desc == "Lcom/johnson/asm/common/doubletap/DoubleTap;") {
+            if (annotation.desc == annotationName) {
                 annotation.values.forEach {
                     if (it is Boolean) {
                         return it
@@ -155,8 +156,9 @@ class DoubleTapClassNodeHelper : AsmHelper {
         )
         )
         var timeCheck: Int? = null
+        val annotationName = String.format("L%s;", DoubleTabConfig.ByteCodeInjectAnnotationName)
         method.visibleAnnotations?.forEach forAnnotation@{ annotation ->
-            if (annotation.desc == "Lcom/johnson/asm/common/doubletap/DoubleTap;") {
+            if (annotation.desc == annotationName) {
                 annotation.values.forEach {
                     if (it is Int) {
                         timeCheck = it

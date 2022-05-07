@@ -1,18 +1,24 @@
 package com.kronos.doubletap
 
 open class DoubleTabConfig {
-    var injectClassName = ""
-    var injectFunctionName = ""
+    var injectClassName = "com.johnson.asm.common.doubletap.DoubleTapCheck"
+    var injectFunctionName = "isNotDoubleTap"
+    var injectAnnotationName = "com.johnson.asm.common.doubletap.DoubleTap"
     fun transform() {
-        if (injectClassName.isEmpty()) {
-            ByteCodeInjectClassName = "com/johnson/asm/common/doubletap/DoubleTapCheck"
+        ByteCodeInjectClassName = if (injectClassName.isEmpty()) {
+            "com/johnson/asm/common/doubletap/DoubleTapCheck"
         } else {
-            ByteCodeInjectClassName = injectClassName.replace(".", "/")
+            injectClassName.replace(".", "/")
         }
-        if (injectFunctionName.isEmpty()) {
-            ByteCodeInjectFunctionName = "isNotDoubleTap"
+        ByteCodeInjectFunctionName = if (injectFunctionName.isEmpty()) {
+            "isNotDoubleTap"
         } else {
-            ByteCodeInjectFunctionName = injectFunctionName
+            injectFunctionName
+        }
+        ByteCodeInjectAnnotationName = if (injectAnnotationName.isEmpty()) {
+            "com/johnson/asm/common/doubletap/DoubleTap"
+        } else {
+            injectAnnotationName.replace(".", "/")
         }
     }
 
@@ -22,5 +28,8 @@ open class DoubleTabConfig {
 
         @JvmField
         var ByteCodeInjectFunctionName = ""
+
+        @JvmField
+        var ByteCodeInjectAnnotationName = ""
     }
 }
