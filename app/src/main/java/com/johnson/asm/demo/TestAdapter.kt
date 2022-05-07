@@ -25,6 +25,7 @@ class TestAdapter : RecyclerView.Adapter<TestAdapter.ViewHolder>() {
     }
 
     class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        private var itemView222: View = itemView
 
         @DoubleTap(4000)
         override fun onClick(v: View?) {

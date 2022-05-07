@@ -3,5 +3,7 @@ include ':AutoTrackPlugin'
 include ':BasePlugin'
 include ':thread_hook_plugin'
 include ':multiPlugin'
+include ':TimeLogPligin'
+
 rootProject.name = "Plugin"
 

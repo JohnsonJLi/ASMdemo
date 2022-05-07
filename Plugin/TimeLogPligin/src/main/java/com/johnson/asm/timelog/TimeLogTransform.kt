@@ -1,18 +1,18 @@
-package com.kronos.doubletap
+package com.johnson.asm.timelog
 
 import com.android.build.api.transform.Transform
 import com.android.build.api.transform.TransformException
 import com.android.build.api.transform.TransformInvocation
-import com.kronos.doubletap.helper.DoubleTapClassNodeHelper
+import com.johnson.asm.timelog.helper.TimeLogClassNodeHelper
 import com.kronos.plugin.base.BaseTransform
 import com.kronos.plugin.base.ClassUtils
 import com.kronos.plugin.base.Log
 import com.kronos.plugin.base.TransformCallBack
 import java.io.IOException
 
-abstract class DoubleTapTransform : Transform() {
+abstract class TimeLogTransform : Transform() {
     override fun getName(): String {
-        return "DoubleTapTransform"
+        return "TimeLogTransform"
     }
 
     override fun isIncremental(): Boolean {
@@ -21,10 +21,10 @@ abstract class DoubleTapTransform : Transform() {
 
     @Throws(TransformException::class, InterruptedException::class, IOException::class)
     override fun transform(transformInvocation: TransformInvocation) {
-        val injectHelper = DoubleTapClassNodeHelper()
+        val injectHelper = TimeLogClassNodeHelper()
         val baseTransform = BaseTransform(transformInvocation, object : TransformCallBack {
             override fun process(className: String, classBytes: ByteArray?): ByteArray? {
-                Log.info("?>process className:$className ")
+                Log.info("> process className : $className ")
                 if (ClassUtils.checkClassName(className)) {
                     try {
                         return classBytes?.let { injectHelper.modifyClass(it) }
