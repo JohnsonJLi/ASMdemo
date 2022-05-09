@@ -30,6 +30,7 @@ class DoubleTapClassNodeHelper : AsmHelper {
         val parentNode = classNodeMap[className]
 
         classNode.interfaces?.forEach {
+            Log.info("classNode : ${classNode.name}    interfaces >>>>>> : ${it}")
             DoubleTabConfig.hookPoints.forEach { point ->
                 if (it == point.interfaceName) {
                     classNode.methods?.forEach { method ->
@@ -48,6 +49,7 @@ class DoubleTapClassNodeHelper : AsmHelper {
         }
         classNode.lambdaHelper(true) {
 //            (it.name == "onClick" && it.desc.contains(")Landroid/view/View\$OnClickListener;"))
+            Log.info("DoubleTabConfig.hookPoints :${it.name}")
             DoubleTabConfig.hookPoints.forEach { point ->
                 if (it.name == point.methodName && it.desc.contains(")${point.interfaceSignSuffix}")) {
                     return@lambdaHelper true
@@ -94,14 +96,14 @@ class DoubleTapClassNodeHelper : AsmHelper {
     }
 
     private fun initFunction(
-            node: ClassNode,
-            method: MethodNode,
-            methodName: String = "",
-            isStatic: Boolean = false
+        node: ClassNode,
+        method: MethodNode,
+        methodName: String = "",
+        isStatic: Boolean = false
     ) {
         var hasDoubleTap = false
         val variableName =
-                if (isStatic) "doubleTapStatic_${methodName.replace("-", "_")}" else "doubleTap"
+            if (isStatic) "doubleTapStatic_${methodName.replace("-", "_")}" else "doubleTap"
         node.fields?.forEach {
             if (it.name == variableName) {
                 hasDoubleTap = true
@@ -114,31 +116,31 @@ class DoubleTapClassNodeHelper : AsmHelper {
                 ACC_PRIVATE + ACC_FINAL
             }
             node.visitField(
-                    access, variableName, String.format(
+                access, variableName, String.format(
                     "L%s;",
                     DoubleTabConfig.ByteCodeInjectClassName
-            ), node.signature, null
+                ), node.signature, null
             )
             val instructions = method.instructions
             method.instructions?.iterator()?.forEach {
                 if ((it.opcode >= Opcodes.IRETURN && it.opcode <= Opcodes.RETURN) || it.opcode == Opcodes.ATHROW) {
                     instructions.insertBefore(it, VarInsnNode(ALOAD, 0))
                     instructions.insertBefore(
-                            it,
-                            TypeInsnNode(NEW, DoubleTabConfig.ByteCodeInjectClassName)
+                        it,
+                        TypeInsnNode(NEW, DoubleTabConfig.ByteCodeInjectClassName)
                     )
                     instructions.insertBefore(it, InsnNode(DUP))
                     instructions.insertBefore(
-                            it, MethodInsnNode(
+                        it, MethodInsnNode(
                             INVOKESPECIAL, DoubleTabConfig.ByteCodeInjectClassName,
                             "<init>", "()V", false
-                    )
+                        )
                     )
                     instructions.insertBefore(
-                            it, FieldInsnNode(
+                        it, FieldInsnNode(
                             if (isStatic) PUTSTATIC else PUTFIELD, node.name, variableName,
                             String.format("L%s;", DoubleTabConfig.ByteCodeInjectClassName)
-                    )
+                        )
                     )
                 }
             }

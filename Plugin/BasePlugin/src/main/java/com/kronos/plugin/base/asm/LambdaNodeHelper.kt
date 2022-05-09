@@ -15,14 +15,17 @@ import org.objectweb.asm.tree.MethodNode
  *
  */
 
-fun ClassNode.lambdaHelper(isStatic: Boolean = false, block: (InvokeDynamicInsnNode) -> Boolean): MutableList<MethodNode> {
+fun ClassNode.lambdaHelper(
+    isStatic: Boolean = false,
+    block: (InvokeDynamicInsnNode) -> Boolean
+): MutableList<MethodNode> {
     val lambdaMethodNodes = mutableListOf<MethodNode>()
     methods?.forEach { method ->
         method?.instructions?.iterator()?.forEach {
 //            Log.info("????>>>>>  lambdaHelper:${it}")
             if (it is InvokeDynamicInsnNode) {
                 if (block.invoke(it)) {
-                    //   Log.info("dynamicName:${it.name} dynamicDesc:${it.desc}")
+//                    Log.info("dynamicName:${it.name} dynamicDesc:${it.desc}")
                     val args = it.bsmArgs
                     args.forEach { arg ->
                         if (arg is Handle) {

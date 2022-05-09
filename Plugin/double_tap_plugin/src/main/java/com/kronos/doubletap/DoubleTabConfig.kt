@@ -40,12 +40,12 @@ open class DoubleTabConfig {
                         methodSign = "onClick(Landroid/view/View;)V"
                 ),
                 DoubleTapHookPoint(
-                        interfaceName = "com/chad/library/adapter/base/BaseQuickAdapter\$OnItemClickListener",
+                        interfaceName = "com/chad/library/adapter/base/listener/OnItemClickListener",
                         methodName = "onItemClick",
                         methodSign = "onItemClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
                 ),
                 DoubleTapHookPoint(
-                        interfaceName = "com/chad/library/adapter/base/BaseQuickAdapter\$OnItemChildClickListener",
+                        interfaceName = "com/chad/library/adapter/base/listener/OnItemChildClickListener",
                         methodName = "onItemChildClick",
                         methodSign = "onItemChildClick(Lcom/chad/library/adapter/base/BaseQuickAdapter;Landroid/view/View;I)V"
                 )

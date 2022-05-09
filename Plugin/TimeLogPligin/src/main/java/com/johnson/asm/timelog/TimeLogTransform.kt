@@ -6,7 +6,6 @@ import com.android.build.api.transform.TransformInvocation
 import com.johnson.asm.timelog.helper.TimeLogClassNodeHelper
 import com.kronos.plugin.base.BaseTransform
 import com.kronos.plugin.base.ClassUtils
-import com.kronos.plugin.base.Log
 import com.kronos.plugin.base.TransformCallBack
 import java.io.IOException
 

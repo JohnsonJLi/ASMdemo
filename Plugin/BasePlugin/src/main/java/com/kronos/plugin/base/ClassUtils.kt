@@ -8,8 +8,8 @@ object ClassUtils {
         // 感谢大佬 dingshaoran
         //ClassUtils.path2Classname(className); File.separator donot match jar entryName on windows
         return entryName.replace(".class", "")
-                .replace('\\', '.')
-                .replace('/', '.')
+            .replace('\\', '.')
+            .replace('/', '.')
     }
 
     fun checkClassName(className: String): Boolean {
@@ -17,6 +17,9 @@ object ClassUtils {
             return false
         }
         if (className.endsWith("R.class")) {
+            return false
+        }
+        if (className.startsWith("com/chad/library")) {
             return false
         }
         return (!className.contains("R\\$") && !className.endsWith("R")

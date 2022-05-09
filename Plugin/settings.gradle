@@ -1,9 +1,9 @@
-include ':double_tap_plugin'
 include ':AutoTrackPlugin'
 include ':BasePlugin'
 include ':thread_hook_plugin'
 include ':multiPlugin'
 include ':TimeLogPligin'
+include ':double_tap_plugin'
 
 rootProject.name = "Plugin"
 

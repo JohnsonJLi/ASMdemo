@@ -11,8 +11,8 @@ import com.johnson.asm.common.doubletap.DoubleTap
 class TestAdapter : RecyclerView.Adapter<TestAdapter.ViewHolder>() {
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
         return ViewHolder(
-                LayoutInflater.from(viewGroup.context)
-                        .inflate(R.layout.recycler_item_view, viewGroup, false)
+            LayoutInflater.from(viewGroup.context)
+                .inflate(R.layout.recycler_item_view, viewGroup, false)
         )
     }
 
@@ -24,7 +24,8 @@ class TestAdapter : RecyclerView.Adapter<TestAdapter.ViewHolder>() {
         return 300
     }
 
-    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
         private var itemView222: View = itemView
 
         @DoubleTap(4000)
@@ -43,4 +44,21 @@ class TestAdapter : RecyclerView.Adapter<TestAdapter.ViewHolder>() {
 //            }
         }
     }
+
+    fun View.isVisible(visible: Boolean): Boolean {
+        return if (visible) {
+            this.visibility = View.VISIBLE
+            true
+        } else {
+            this.visibility = View.GONE
+            false
+        }
+    }
+
+    var isDragOnLongPressEnabled = true
+        set(value) {
+            field = value
+            Log.e("if xxxxx ", "ififififififif")
+        }
+
 }
