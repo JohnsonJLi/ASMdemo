@@ -24,7 +24,6 @@ abstract class DoubleTapTransform : Transform() {
         val injectHelper = DoubleTapClassNodeHelper()
         val baseTransform = BaseTransform(transformInvocation, object : TransformCallBack {
             override fun process(className: String, classBytes: ByteArray?): ByteArray? {
-                Log.info("?>process className:$className ")
                 if (ClassUtils.checkClassName(className)) {
                     try {
                         return classBytes?.let { injectHelper.modifyClass(it) }

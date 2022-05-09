@@ -11,6 +11,7 @@ import org.objectweb.asm.Opcodes.*
 import org.objectweb.asm.tree.*
 import java.io.IOException
 
+
 class TimeLogClassNodeHelper : AsmHelper {
 
     private val classNodeMap = hashMapOf<String, ClassNode>()
@@ -22,24 +23,18 @@ class TimeLogClassNodeHelper : AsmHelper {
         //1 将读入的字节转为classNode
         classReader.accept(classNode, 0)
         classNodeMap[classNode.name] = classNode
-        val className = classNode.outerClass
-        Log.info("?> TimeLog name:${classNode.name}")
-        val parentNode = classNodeMap[className]
-
+//        val className = classNode.outerClass
+//        val parentNode = classNodeMap[className]
 
         classNode.methods?.forEach { method ->
-            if (method.isPrintTimeLog()) {
-                method.insertMethodTimeLogTrack()
-            }
+            method.insertMethodTimeLogTrack(classNode)
         }
-
 
         val classWriter = ClassWriter(0)
         //3  将classNode转为字节数组
         classNode.accept(classWriter)
         return classWriter.toByteArray()
     }
-
 
     //是否打印log
     private fun MethodNode.isPrintTimeLog(): Boolean {
@@ -52,46 +47,66 @@ class TimeLogClassNodeHelper : AsmHelper {
         return false
     }
 
-
-    private fun MethodNode.insertMethodTimeLogTrack() {
-        var hasDoubleTap = false
+    private fun MethodNode.insertMethodTimeLogTrack(classNode: ClassNode) {
         val variableName = "startTimeMillis"
-        localVariables?.forEach {
-            if (it.name == variableName) {
-                hasDoubleTap = true
-            }
-        }
+        val printTimeLog = isPrintTimeLog()
 
-        if (!hasDoubleTap) {
-            val labelStart = Label()
-            val labelEnd = Label()
-            val firstNode = instructions.first
-            instructions?.insertBefore(firstNode, LabelNode(Label()))
-            instructions?.insertBefore(firstNode, MethodInsnNode(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false))
-            instructions?.insertBefore(firstNode, VarInsnNode(LSTORE, 321))
-            instructions?.insertBefore(firstNode, LabelNode(labelStart))
+        var methodFirstLineNumber: Int? = null
+        val labelStart = Label()
+        val labelEnd = Label()
+        instructions?.apply {
+            val firstNode = first ?: return
+            insertBefore(firstNode, LabelNode(Label()))
+            insertBefore(firstNode, MethodInsnNode(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false))
+            insertBefore(firstNode, VarInsnNode(LSTORE, 321))
+            insertBefore(firstNode, LabelNode(labelStart))
 
-            instructions?.iterator()?.forEach {
+            iterator().forEach {
+                if (methodFirstLineNumber == null && it is LineNumberNode) {
+                    methodFirstLineNumber = it.line
+//                    Log.info("LineNumberNode ${classNode.name}:${it.line}")
+                }
                 if ((it.opcode >= Opcodes.IRETURN && it.opcode <= Opcodes.RETURN) || it.opcode == Opcodes.ATHROW) {
-                    Log.info(">>  labelEnd  : ${it}")
-                    instructions?.insertBefore(it, LabelNode(Label()))
+                    insertBefore(it, LabelNode(Label()))
+                    insertBefore(it, MethodInsnNode(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false))
+                    insertBefore(it, VarInsnNode(LLOAD, 321))
+                    insertBefore(it, InsnNode(LSUB))
+                    insertBefore(it, VarInsnNode(LSTORE, 432))
 
-                    instructions?.insertBefore(it, LdcInsnNode("TimeLog@"))
-                    instructions?.insertBefore(it, MethodInsnNode(Opcodes.INVOKESTATIC, "java/lang/System", "currentTimeMillis", "()J", false))
-                    instructions?.insertBefore(it, VarInsnNode(LLOAD, 321))
-                    instructions?.insertBefore(it, InsnNode(LSUB))
-                    instructions?.insertBefore(it, MethodInsnNode(INVOKESTATIC, "java/lang/String", "valueOf", "(J)Ljava/lang/String;", false))
-                    instructions?.insertBefore(it, MethodInsnNode(INVOKESTATIC, "android/util/Log", "e", "(Ljava/lang/String;Ljava/lang/String;)I", false))
-                    instructions?.insertBefore(it, InsnNode(POP))
-                    instructions?.insertBefore(it, LabelNode(Label()))
+                    var labelIFLE = Label()
+                    if (!printTimeLog) {
+                        insertBefore(it, VarInsnNode(LLOAD, 432))
+                        insertBefore(it, IntInsnNode(BIPUSH, 8))
+                        insertBefore(it, InsnNode(I2L))
+                        insertBefore(it, InsnNode(LCMP))
+                        labelIFLE = Label()
+                        insertBefore(it, JumpInsnNode(IFLE, LabelNode(labelIFLE)))
+                    }
+                    insertBefore(it, LabelNode(Label()))
 
+                    insertBefore(it, LdcInsnNode(if (printTimeLog) "TimeLog@" else "TimeLog"))
+                    insertBefore(it, TypeInsnNode(NEW, "java/lang/StringBuilder"))
+                    insertBefore(it, InsnNode(DUP))
+                    insertBefore(it, MethodInsnNode(INVOKESPECIAL, "java/lang/StringBuilder", "<init>", "()V", false))
+                    insertBefore(it, LdcInsnNode("${classNode.name.replace("/", ".")}.$name >>> ["))
+                    insertBefore(it, MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false))
+                    insertBefore(it, VarInsnNode(LLOAD, 432))
+                    insertBefore(it, MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(J)Ljava/lang/StringBuilder;", false))
+                    insertBefore(it, LdcInsnNode("]ms  LineNumber : ${methodFirstLineNumber ?: -1}"))
+                    insertBefore(it, MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "append", "(Ljava/lang/String;)Ljava/lang/StringBuilder;", false))
+                    insertBefore(it, MethodInsnNode(INVOKEVIRTUAL, "java/lang/StringBuilder", "toString", "()Ljava/lang/String;", false))
+
+                    insertBefore(it, MethodInsnNode(INVOKESTATIC, "android/util/Log", "e", "(Ljava/lang/String;Ljava/lang/String;)I", false))
+                    insertBefore(it, InsnNode(POP))
+
+                    insertBefore(it, LabelNode(labelIFLE))
 
                 }
             }
-            visitLabel(labelEnd)
-            visitLocalVariable(variableName, "J", null, labelStart, labelEnd, 321)
-
         }
+
+        visitLabel(labelEnd)
+        visitLocalVariable(variableName, "J", null, labelStart, labelEnd, 321)
     }
 }
 

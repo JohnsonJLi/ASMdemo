@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.johnson.asm.common.timelog.TimeLog
+import java.lang.Exception
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,12 +15,23 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val test = "你好"
-        findViewById<View>(R.id.textview).setOnClickListener { Log.e("MainActivity", ">>>>>>>>> onClick 1 ") }
+        findViewById<View>(R.id.textview).setOnClickListener(object : View.OnClickListener {
+            @TimeLog
+            override fun onClick(v: View?) {
+                Log.e("MainActivity", ">>>>>>>>> onClick 1 ")
+            }
+        })
         findViewById<View>(R.id.textview2).setOnClickListener {
             Log.e(
                     "MainActivity",
                     ">>>>>>>>> onClick 2 $test $applicationContext"
             )
+        }
+        if (test.length > 2) {
+            return
+        }
+        if (test.length < 2) {
+            throw Exception("test throw")
         }
         findViewById<View>(R.id.textview3).setOnClickListener {
             Log.e(

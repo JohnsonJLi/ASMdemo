@@ -27,7 +27,6 @@ class DoubleTapClassNodeHelper : AsmHelper {
         classReader.accept(classNode, 0)
         classNodeMap[classNode.name] = classNode
         val className = classNode.outerClass
-        Log.info("?> name:${classNode.name} interfaces:${classNode.interfaces} ")
         val parentNode = classNodeMap[className]
 
         classNode.interfaces?.forEach {
@@ -51,7 +50,6 @@ class DoubleTapClassNodeHelper : AsmHelper {
 //            (it.name == "onClick" && it.desc.contains(")Landroid/view/View\$OnClickListener;"))
             DoubleTabConfig.hookPoints.forEach { point ->
                 if (it.name == point.methodName && it.desc.contains(")${point.interfaceSignSuffix}")) {
-                    Log.info(">>>>>>>> it.desc  ${it.desc}")
                     return@lambdaHelper true
                 }
             }
