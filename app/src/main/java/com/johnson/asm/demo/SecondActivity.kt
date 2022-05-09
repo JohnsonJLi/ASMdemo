@@ -42,7 +42,6 @@ class SecondActivity : AppCompatActivity() {
                         view
                     )
                 }
-
             })
             setOnItemChildClickListener(object : OnItemChildClickListener {
                 @DoubleTap(10)
