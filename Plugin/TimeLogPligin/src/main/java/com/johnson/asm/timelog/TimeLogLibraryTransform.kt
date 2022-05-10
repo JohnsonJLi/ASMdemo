@@ -9,7 +9,8 @@ class TimeLogLibraryTransform : TimeLogTransform() {
 
     override fun getScopes(): MutableSet<in QualifiedContent.Scope> {
         return ImmutableSet.of(
-            QualifiedContent.Scope.PROJECT
+            QualifiedContent.Scope.PROJECT,
+            QualifiedContent.Scope.SUB_PROJECTS
         )
     }
 

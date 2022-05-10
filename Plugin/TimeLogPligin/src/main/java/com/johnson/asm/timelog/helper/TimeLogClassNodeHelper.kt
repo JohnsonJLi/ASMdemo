@@ -66,7 +66,7 @@ class TimeLogClassNodeHelper : AsmHelper {
             insertBefore(
                 firstNode,
                 MethodInsnNode(
-                    Opcodes.INVOKESTATIC,
+                    INVOKESTATIC,
                     "java/lang/System",
                     "currentTimeMillis",
                     "()J",
@@ -138,7 +138,7 @@ class TimeLogClassNodeHelper : AsmHelper {
                     insertBefore(
                         it,
                         MethodInsnNode(
-                            Opcodes.INVOKESTATIC,
+                            INVOKESTATIC,
                             "java/lang/System",
                             "currentTimeMillis",
                             "()J",
@@ -152,7 +152,7 @@ class TimeLogClassNodeHelper : AsmHelper {
                     var labelIFLE = Label()
                     if (!printTimeLog) {
                         insertBefore(it, VarInsnNode(LLOAD, 5432))
-                        insertBefore(it, IntInsnNode(BIPUSH, 8))
+                        insertBefore(it, IntInsnNode(SIPUSH, TimeLogConfig.filterTime))
                         insertBefore(it, InsnNode(I2L))
                         insertBefore(it, InsnNode(LCMP))
                         labelIFLE = Label()

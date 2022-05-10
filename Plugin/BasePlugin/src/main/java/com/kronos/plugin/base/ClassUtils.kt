@@ -19,9 +19,9 @@ object ClassUtils {
         if (className.endsWith("R.class")) {
             return false
         }
-        if (className.startsWith("com/chad/library")) {
-            return false
-        }
+//        if (className.startsWith("com/chad/library")) {
+//            return false
+//        }
         return (!className.contains("R\\$") && !className.endsWith("R")
                 && !className.endsWith("BuildConfig"))
     }

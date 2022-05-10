@@ -15,12 +15,14 @@ public class TimeLogPlugin implements Plugin<Project> {
     public void apply(Project project) {
         boolean isApp = project.getPlugins().hasPlugin(AppPlugin.class);
         project.getExtensions().create(EXT_NAME, TimeLogConfig.class);
+        TimeLogConfigExtension timeLog = project.getExtensions().create("timeLogConfig", TimeLogConfigExtension.class);
         project.afterEvaluate(project1 -> {
             TimeLogConfig config = (TimeLogConfig) project1.getExtensions().findByName(EXT_NAME);
             if (config == null) {
                 config = new TimeLogConfig();
             }
-            config.transform();
+            //timeLog
+            config.transform(timeLog.time, timeLog.annotationPath);
         });
         if (isApp) {
             AppExtension appExtension = project.getExtensions().getByType(AppExtension.class);
