@@ -33,9 +33,15 @@ android {
 //    }
 }
 
-timeLogConfig {
-    time = 8
-    annotationPath = "com.johnson.asm.common.timelog.TimeLog"
+doubleTab{
+    injectClassName = "com.johnson.asm.common.doubletap.DoubleTapCheck"
+    injectFunctionName = "isNotDoubleTap"
+    injectAnnotationName = "com.johnson.asm.common.doubletap.DoubleTap"
+}
+
+timeLog {
+    logFilterTime = 8
+    injectAnnotationName = "com.johnson.asm.common.timelog.TimeLog"
 }
 
 dependencies {

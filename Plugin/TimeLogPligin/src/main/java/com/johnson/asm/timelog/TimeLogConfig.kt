@@ -2,13 +2,16 @@ package com.johnson.asm.timelog
 
 open class TimeLogConfig {
 
-    @JvmOverloads
-    fun transform(
-        filterTime: Int = 16,
-        injectAnnotationName: String = "com.johnson.asm.common.timelog.TimeLog"
-    ) {
-        ByteCodeInjectAnnotationName = injectAnnotationName.replace(".", "/")
-        TimeLogConfig.filterTime = filterTime
+    var injectAnnotationName = "com.johnson.asm.common.timelog.TimeLog"
+    var logFilterTime = 16
+
+    fun transform() {
+        ByteCodeInjectAnnotationName = if (injectAnnotationName.isNullOrEmpty()) {
+            "com/johnson/asm/common/timelog/TimeLog"
+        } else {
+            injectAnnotationName.replace(".", "/")
+        }
+        filterTime = logFilterTime
     }
 
     companion object {

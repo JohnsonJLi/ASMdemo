@@ -1,37 +1,40 @@
-package com.johnson.asm.timelog;
+package com.johnson.asm.timelog
 
-import com.android.build.gradle.AppExtension;
-import com.android.build.gradle.AppPlugin;
-import com.android.build.gradle.LibraryExtension;
+import com.android.build.gradle.AppExtension
+import com.android.build.gradle.AppPlugin
+import com.android.build.gradle.LibraryExtension
+import com.johnson.asm.timelog.TimeLogConfig
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-import org.gradle.api.Plugin;
-import org.gradle.api.Project;
-
-public class TimeLogPlugin implements Plugin<Project> {
-
-    private static final String EXT_NAME = "timeLog";
-
-    @Override
-    public void apply(Project project) {
-        boolean isApp = project.getPlugins().hasPlugin(AppPlugin.class);
-        project.getExtensions().create(EXT_NAME, TimeLogConfig.class);
-        TimeLogConfigExtension timeLog = project.getExtensions().create("timeLogConfig", TimeLogConfigExtension.class);
-        project.afterEvaluate(project1 -> {
-            TimeLogConfig config = (TimeLogConfig) project1.getExtensions().findByName(EXT_NAME);
+class TimeLogPlugin : Plugin<Project> {
+    override fun apply(project: Project) {
+        val isApp = project.plugins.hasPlugin(AppPlugin::class.java)
+        project.extensions.create(EXT_NAME, TimeLogConfig::class.java)
+        project.afterEvaluate { project1: Project ->
+            var config = project1.extensions.findByName(EXT_NAME) as TimeLogConfig?
             if (config == null) {
-                config = new TimeLogConfig();
+                config = TimeLogConfig()
             }
             //timeLog
-            config.transform(timeLog.time, timeLog.annotationPath);
-        });
+            config.transform()
+        }
         if (isApp) {
-            AppExtension appExtension = project.getExtensions().getByType(AppExtension.class);
-            appExtension.registerTransform(new TimeLogAppTransform());
-            return;
+            val appExtension = project.extensions.getByType(
+                AppExtension::class.java
+            )
+            appExtension.registerTransform(TimeLogAppTransform())
+            return
         }
-        if (project.getPlugins().hasPlugin("com.android.library")) {
-            LibraryExtension libraryExtension = project.getExtensions().getByType(LibraryExtension.class);
-            libraryExtension.registerTransform(new TimeLogLibraryTransform());
+        if (project.plugins.hasPlugin("com.android.library")) {
+            val libraryExtension = project.extensions.getByType(
+                LibraryExtension::class.java
+            )
+            libraryExtension.registerTransform(TimeLogLibraryTransform())
         }
+    }
+
+    companion object {
+        private const val EXT_NAME = "timeLog"
     }
 }
