@@ -31,6 +31,7 @@ class SecondActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = TestAdapter2().apply {
             setOnItemClickListener(object : OnItemClickListener {
+                @TimeLog
                 @DoubleTap(5000)
                 override fun onItemClick(
                     adapter: BaseQuickAdapter<*, *>,
@@ -44,6 +45,7 @@ class SecondActivity : AppCompatActivity() {
                 }
             })
             setOnItemChildClickListener(object : OnItemChildClickListener {
+                @TimeLog
                 @DoubleTap(10)
                 override fun onItemChildClick(
                     adapter: BaseQuickAdapter<*, *>,
