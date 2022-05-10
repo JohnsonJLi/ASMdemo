@@ -53,9 +53,10 @@ class SecondActivity : AppCompatActivity() {
                     position: Int
                 ) {
                     ToastHelper.toast(
-                        getItem(position) + "Child",
+                        getItem(position) + "Child : " + itemCount,
                         view
                     )
+
                 }
             })
         }
@@ -87,6 +88,16 @@ public class TestAdapter2 : BaseQuickAdapter<String, BaseViewHolder>(R.layout.re
 
     override fun convert(holder: BaseViewHolder, item: String) {
         holder.setText(R.id.titleTv, item)
+    }
+
+//    @TimeLog
+    override fun getItemCount(): Int {
+        return super.getItemCount()
+    }
+
+//    @TimeLog
+    override fun getItem(position: Int): String {
+        return super.getItem(position)
     }
 
 }

@@ -90,14 +90,11 @@ class TimeLogClassNodeHelper : AsmHelper {
                                 val size = returnType.size
                                 val descriptor = returnType.descriptor
                                 if (size == 1) {
-                                    //super.visitInsn(DUP)
                                     insertBefore(it, InsnNode(DUP))
 
                                 } else {
-                                    //super.visitInsn(DUP2)
                                     insertBefore(it, InsnNode(DUP2))
                                 }
-                                //val methodDesc = String.format("(%s)V", descriptor)
                                 insertBefore(
                                     it,
                                     MethodInsnNode(
@@ -109,11 +106,8 @@ class TimeLogClassNodeHelper : AsmHelper {
                                     )
                                 )
                                 insertBefore(it, VarInsnNode(ASTORE, 6543))
-                                //printValueOnStack(methodDesc)
                             }
                             ARETURN -> {
-                                //super.visitInsn(DUP)
-                                // printValueOnStack("(Ljava/lang/Object;)V")
                                 insertBefore(it, InsnNode(DUP))
                                 insertBefore(
                                     it,
@@ -128,12 +122,10 @@ class TimeLogClassNodeHelper : AsmHelper {
                                 insertBefore(it, VarInsnNode(ASTORE, 6543))
                             }
                             RETURN -> {
-                                //printMessage("    return void")
                                 insertBefore(it, LdcInsnNode("void"))
                                 insertBefore(it, VarInsnNode(ASTORE, 6543))
                             }
                             else -> {
-                                //printMessage("    abnormal return")
                                 insertBefore(it, LdcInsnNode("abnormal"))
                                 insertBefore(it, VarInsnNode(ASTORE, 6543))
                             }
@@ -235,7 +227,9 @@ class TimeLogClassNodeHelper : AsmHelper {
                                     false
                                 )
                             )
-
+//                            attrs?.forEach {
+//                                Log.info("attrs : > ${it}")
+//                            }
                             for (t in argumentTypes) {
                                 val sort: Int = t.sort
                                 val size: Int = t.size
@@ -255,13 +249,9 @@ class TimeLogClassNodeHelper : AsmHelper {
                                         false
                                     )
                                 )
-
-                                //super.visitVarInsn(opcode, slotIndex)
                                 insertBefore(it, VarInsnNode(opcode, slotIndex))
 
                                 if (sort >= Type.BOOLEAN && sort <= Type.DOUBLE) {
-//                            val methodDesc = String.format("(%s)V", descriptor)
-//                            printValueOnStack(methodDesc)
                                     insertBefore(
                                         it,
                                         MethodInsnNode(
@@ -276,7 +266,6 @@ class TimeLogClassNodeHelper : AsmHelper {
                                         )
                                     )
                                 } else {
-//                            printValueOnStack("(Ljava/lang/Object;)V")
                                     insertBefore(
                                         it,
                                         MethodInsnNode(
