@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import com.johnson.asm.common.timelog.TimeLog
+import com.johnson.router.Router
+import com.johnson.router.routerAct
 import java.lang.Exception
 
+@Router("main/activity")
 class MainActivity : AppCompatActivity() {
 
     @TimeLog
@@ -23,8 +26,8 @@ class MainActivity : AppCompatActivity() {
         })
         findViewById<View>(R.id.textview2).setOnClickListener {
             Log.e(
-                    "MainActivity",
-                    ">>>>>>>>> onClick 2 $test $applicationContext"
+                "MainActivity",
+                ">>>>>>>>> onClick 2 $test $applicationContext"
             )
         }
         if (test.length > 2) {
@@ -35,10 +38,11 @@ class MainActivity : AppCompatActivity() {
         }
         findViewById<View>(R.id.textview3).setOnClickListener {
             Log.e(
-                    "MainActivity",
-                    ">>>>>>>>> onClick 2 $test $applicationContext"
+                "MainActivity",
+                ">>>>>>>>> onClick 2 $test $applicationContext"
             )
-            startActivity(Intent(this, SecondActivity::class.java))
+//            startActivity(Intent(this, SecondActivity::class.java))
+            routerAct("second/activity")
         }
     }
 }

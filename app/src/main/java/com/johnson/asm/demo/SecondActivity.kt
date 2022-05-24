@@ -16,9 +16,11 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.johnson.asm.common.ToastHelper
 import com.johnson.asm.common.doubletap.DoubleTap
 import com.johnson.asm.common.timelog.TimeLog
+import com.johnson.router.Router
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+@Router("second/activity")
 class SecondActivity : AppCompatActivity() {
 
     var poolExecutor: ExecutorService? = null

@@ -3,6 +3,7 @@ include ':BasePlugin'
 include ':thread_hook_plugin'
 include ':multiPlugin'
 include ':TimeLogPligin'
+include ':RouterPligin'
 include ':double_tap_plugin'
 
 rootProject.name = "Plugin"
