@@ -173,7 +173,7 @@ class TimeLogClassNodeHelper : AsmHelper {
                             false
                         )
                     )
-                    insertBefore(it, LdcInsnNode("${classNode.name.replace("/", ".")}.$name >>> ["))
+                    insertBefore(it, LdcInsnNode("${classNode.name.replace("/", ".")}.$name(${classNode.sourceFile}:${methodFirstLineNumber ?: -1}) >>> ["))
                     insertBefore(
                         it,
                         MethodInsnNode(
@@ -197,7 +197,7 @@ class TimeLogClassNodeHelper : AsmHelper {
                     )
                     insertBefore(
                         it,
-                        LdcInsnNode("]ms  LineNumber : ${methodFirstLineNumber ?: -1}")
+                        LdcInsnNode("]ms ")
                     )
                     insertBefore(
                         it,
