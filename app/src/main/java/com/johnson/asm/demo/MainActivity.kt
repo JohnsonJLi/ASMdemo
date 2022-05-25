@@ -1,10 +1,12 @@
 package com.johnson.asm.demo
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.fragment.app.Fragment
 import com.johnson.asm.common.timelog.TimeLog
 import com.johnson.router.Router
 import com.johnson.router.routerAct
@@ -17,7 +19,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.e("MainActivity", "onCreate")
         val test = "你好"
+
         findViewById<View>(R.id.textview).setOnClickListener(object : View.OnClickListener {
             @TimeLog
             override fun onClick(v: View?) {
@@ -37,12 +41,24 @@ class MainActivity : AppCompatActivity() {
             throw Exception("test throw")
         }
         findViewById<View>(R.id.textview3).setOnClickListener {
+
             Log.e(
                 "MainActivity",
                 ">>>>>>>>> onClick 2 $test $applicationContext"
+
             )
 //            startActivity(Intent(this, SecondActivity::class.java))
             routerAct("second/activity")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("MainActivity", "onDestroy")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        Log.e("MainActivity", "onNewIntent")
     }
 }

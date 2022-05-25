@@ -20,7 +20,7 @@ enum class RouteType(var id: Int, var className: String) {
 //        -1,
 //        ""
 //    ),
-    FRAGMENT(-1, "android.app.Fragment"),
+    FRAGMENT(-1, "androidx.fragment.app.Fragment"),
     UNKNOWN(-1, "Unknown route type");
 
     fun setId(id: Int): RouteType {

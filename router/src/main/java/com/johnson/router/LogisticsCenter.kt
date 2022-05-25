@@ -6,25 +6,24 @@ import com.johnson.router.model.RouteType
 
 class LogisticsCenter {
 
-
     companion object {
-        private val TAG = "Router - LogisticsCenter"
+        private const val TAG = "Router - LogisticsCenter"
         private var registerByPlugin = false
         var isDebug = false
 
         @Synchronized
         fun init(isDebug: Boolean = false) {
-            LogisticsCenter.isDebug = isDebug;
+            LogisticsCenter.isDebug = isDebug
             try {
                 var startInit = System.currentTimeMillis()
                 loadRouterMap()
                 if (registerByPlugin) {
                     Log.i(
-                        TAG, "Load router map by arouter-auto-register plugin."
+                        TAG, "Load router map by auto-register plugin."
                     )
                 } else {
                     // 运行时 扫描 dex
-                    Log.i(TAG, "runtime")
+                    Log.i(TAG, "runtime 暂未实现")
                 }
                 Log.i(
                     TAG,
@@ -46,5 +45,5 @@ class LogisticsCenter {
             Log.i(TAG, routeMeta.toString())
         }
     }
-    
+
 }

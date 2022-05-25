@@ -40,7 +40,7 @@ doubleTab{
 }
 
 timeLog {
-    logFilterTime = 8
+    logFilterTime = 16
     injectAnnotationName = "com.johnson.asm.common.timelog.TimeLog"
 }
 

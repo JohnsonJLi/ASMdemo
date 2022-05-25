@@ -37,12 +37,9 @@ class ScanRouterClassNodeHelper : AsmHelper {
             if (annotation.desc == annotationName) {
                 annotation.values?.forEach {
                     if (it is String && it != "router") {
-                        Log.info(
-                            ">>>>>>>>>> isRouter: $name  \n superName : $superName \n" +
-                                    " sourceFile : $sourceFile \n" +
-                                    " interfaces : $interfaces\n" +
-                                    " router : $it"
-                        )
+//                        val type =
+//                            if (isSuper("android/app/Activity")) 1 else if (isSuper("androidx/fragment/app/Fragment")) 2 else 0
+//                        Log.info("type : $type")
                         RouterPlugin.routes.add(RouteMeta(1, name, it))
                     }
                 }

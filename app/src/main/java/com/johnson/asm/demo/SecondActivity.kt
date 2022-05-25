@@ -1,10 +1,12 @@
 package com.johnson.asm.demo
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +19,7 @@ import com.johnson.asm.common.ToastHelper
 import com.johnson.asm.common.doubletap.DoubleTap
 import com.johnson.asm.common.timelog.TimeLog
 import com.johnson.router.Router
+import com.johnson.router.navigationAct
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -29,6 +32,7 @@ class SecondActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
+        Log.e("SecondActivity", "onCreate")
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = TestAdapter2().apply {
@@ -44,6 +48,7 @@ class SecondActivity : AppCompatActivity() {
                         getItem(position),
                         view
                     )
+                    navigationAct("main/activity")
                 }
             })
             setOnItemChildClickListener(object : OnItemChildClickListener {
@@ -58,7 +63,10 @@ class SecondActivity : AppCompatActivity() {
                         getItem(position) + "Child : " + itemCount,
                         view
                     )
-
+                    navigationAct("main/activity?id=100"){
+                        addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                        addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    }
                 }
             })
         }
@@ -76,6 +84,12 @@ class SecondActivity : AppCompatActivity() {
             // list.add(pi)
         }
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e("SecondActivity", "onDestroy")
+    }
+
 }
 
 public class TestAdapter2 : BaseQuickAdapter<String, BaseViewHolder>(R.layout.recycler_item_view) {
