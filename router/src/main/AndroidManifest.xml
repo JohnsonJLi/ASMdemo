@@ -5,7 +5,7 @@
     <application>
         <provider
             android:name=".InitProvider"
-            android:authorities="com.johnson.router.InitProviderInstaller"
+            android:authorities="${applicationId}.InitProviderInstaller"
             android:exported="false" />
     </application>
 </manifest>
