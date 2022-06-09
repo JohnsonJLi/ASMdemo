@@ -12,4 +12,7 @@
 
 ### 模块路由：  
 
-​	实现了简单的模块路由 仅支持Activity，配合AutoService 可满足大部分需求；
+​	实现了简单的模块路由 仅支持Activity，配合AutoService 可满足大部分需求；  
+  
+
+>参考: https://github.com/Leifzhang/AndroidAutoTrack
