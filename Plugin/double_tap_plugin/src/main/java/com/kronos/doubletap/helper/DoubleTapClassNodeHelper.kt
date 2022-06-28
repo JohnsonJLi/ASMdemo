@@ -154,7 +154,10 @@ class DoubleTapClassNodeHelper : AsmHelper {
         val instructions = method.instructions
         val firstNode = instructions.first
         instructions?.insertBefore(firstNode, LabelNode(Label()))
-        instructions?.insertBefore(firstNode, VarInsnNode(ALOAD, 0))
+        if (!isStatic) {
+            instructions?.insertBefore(firstNode, VarInsnNode(ALOAD, 0))
+        }
+
         instructions?.insertBefore(
             firstNode, FieldInsnNode(
                 if (isStatic) GETSTATIC else GETFIELD, node.name,
@@ -189,10 +192,13 @@ class DoubleTapClassNodeHelper : AsmHelper {
                 false
             )
         )
+
+
         val labelNode = LabelNode(Label())
         instructions?.insertBefore(firstNode, JumpInsnNode(IFNE, labelNode))
         instructions?.insertBefore(firstNode, InsnNode(RETURN))
         instructions?.insertBefore(firstNode, labelNode)
+
     }
 
 }

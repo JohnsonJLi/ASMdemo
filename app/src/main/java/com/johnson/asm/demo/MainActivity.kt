@@ -1,16 +1,13 @@
 package com.johnson.asm.demo
 
-import android.app.Activity
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.johnson.asm.common.timelog.TimeLog
 import com.johnson.router.Router
 import com.johnson.router.routerAct
-import java.lang.Exception
 
 @Router("main/activity")
 class MainActivity : AppCompatActivity() {
@@ -25,14 +22,22 @@ class MainActivity : AppCompatActivity() {
         findViewById<View>(R.id.textview).setOnClickListener(object : View.OnClickListener {
             @TimeLog
             override fun onClick(v: View?) {
-                Log.e("MainActivity", ">>>>>>>>> onClick 1 ")
+                try {
+                    Log.e("test", ">>>>>>>>> onClick 1 ")
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    Log.e("test", "不报错")
+                }
             }
         })
         findViewById<View>(R.id.textview2).setOnClickListener {
-            Log.e(
-                "MainActivity",
-                ">>>>>>>>> onClick 2 $test $applicationContext"
-            )
+            try {
+                Log.e("test", ">>>>>>>>> onClick 2 ")
+//                return@setOnClickListener
+            } catch (e: Exception) {
+                e.printStackTrace()
+                //return@setOnClickListener
+            }
         }
         if (test.length > 2) {
             return
