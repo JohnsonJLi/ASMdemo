@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
             try {
                 Log.e("test", ">>>>>>>>> onClick 2 ")
 //                return@setOnClickListener
+                var i = 1 / 0
+                println(i)
+                Log.e("test", ">>>>>>>>> 1/0 = $i")
             } catch (e: Exception) {
                 e.printStackTrace()
                 //return@setOnClickListener

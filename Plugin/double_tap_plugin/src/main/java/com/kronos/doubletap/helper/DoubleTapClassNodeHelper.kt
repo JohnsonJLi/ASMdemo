@@ -2,7 +2,6 @@ package com.kronos.doubletap.helper
 
 import com.kronos.doubletap.DoubleTabConfig
 import com.kronos.plugin.base.AsmHelper
-import com.kronos.plugin.base.Log
 import com.kronos.plugin.base.asm.lambdaHelper
 import com.kronos.plugin.base.utils.isInitMethod
 import com.kronos.plugin.base.utils.isStatic
