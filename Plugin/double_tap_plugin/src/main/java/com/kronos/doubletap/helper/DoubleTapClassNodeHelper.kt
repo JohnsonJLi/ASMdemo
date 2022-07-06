@@ -3,6 +3,7 @@ package com.kronos.doubletap.helper
 import com.kronos.doubletap.DoubleTabConfig
 import com.kronos.plugin.base.AsmHelper
 import com.kronos.plugin.base.asm.lambdaHelper
+import com.kronos.plugin.base.utils.isClInitMethod
 import com.kronos.plugin.base.utils.isInitMethod
 import com.kronos.plugin.base.utils.isStatic
 import com.kronos.plugin.base.utils.nameWithDesc
@@ -55,13 +56,18 @@ class DoubleTapClassNodeHelper : AsmHelper {
             return@lambdaHelper false
         }.apply {
             if (isNotEmpty()) {
+                var isInit = false
                 classNode.methods?.forEach { method ->
-                    if (method.isInitMethod) {
+                    if (method.isClInitMethod) {
                         forEach {
                             initFunction(classNode, method, it.name, it.isStatic)
                         }
+                        isInit = true
                         return@forEach
                     }
+                }
+                if (!isInit) {
+                    clInitFunction(classNode, this)
                 }
             }
         }.forEach { method ->
@@ -71,6 +77,36 @@ class DoubleTapClassNodeHelper : AsmHelper {
         //3  将classNode转为字节数组
         classNode.accept(classWriter)
         return classWriter.toByteArray()
+    }
+
+    private fun clInitFunction(classNode: ClassNode, mutableList: MutableList<MethodNode>) {
+        val methodVisitor =
+            classNode.visitMethod(ACC_STATIC, "<clinit>", "()V", classNode.signature, null)
+        methodVisitor.visitCode()
+        mutableList.forEach {
+            val variableName = "doubleTapStatic_${it.name.replace("-", "_")}"
+            val access = ACC_PRIVATE + ACC_FINAL + ACC_STATIC
+            classNode.visitField(
+                access,
+                variableName,
+                String.format("L%s;", DoubleTabConfig.ByteCodeInjectClassName),
+                classNode.signature,
+                null
+            )
+            methodVisitor.visitTypeInsn(NEW, DoubleTabConfig.ByteCodeInjectClassName)
+            methodVisitor.visitInsn(DUP)
+            methodVisitor.visitMethodInsn(
+                INVOKESPECIAL, DoubleTabConfig.ByteCodeInjectClassName,
+                "<init>", "()V", false
+            )
+            methodVisitor.visitFieldInsn(
+                PUTSTATIC, classNode.name, variableName,
+                String.format("L%s;", DoubleTabConfig.ByteCodeInjectClassName)
+            )
+        }
+        methodVisitor.visitInsn(RETURN)
+        methodVisitor.visitMaxs(2, 0)
+        methodVisitor.visitEnd()
     }
 
     private fun MethodNode.isExcept(): Boolean {
@@ -121,7 +157,7 @@ class DoubleTapClassNodeHelper : AsmHelper {
             val instructions = method.instructions
             method.instructions?.iterator()?.forEach {
                 if ((it.opcode >= Opcodes.IRETURN && it.opcode <= Opcodes.RETURN) || it.opcode == Opcodes.ATHROW) {
-                    instructions.insertBefore(it, VarInsnNode(ALOAD, 0))
+                    if (!isStatic) instructions.insertBefore(it, VarInsnNode(ALOAD, 0))
                     instructions.insertBefore(
                         it,
                         TypeInsnNode(NEW, DoubleTabConfig.ByteCodeInjectClassName)

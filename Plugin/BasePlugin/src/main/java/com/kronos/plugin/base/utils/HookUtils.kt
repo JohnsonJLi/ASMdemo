@@ -13,6 +13,9 @@ val MethodNode.isStatic: Boolean
 val MethodNode.isInitMethod: Boolean
     get() = name == "<init>"
 
+val MethodNode.isClInitMethod: Boolean
+    get() = name == "<clinit>"
+
 val MethodNode.isAbstractMethod: Boolean
     get() = access and Opcodes.ACC_ABSTRACT == Opcodes.ACC_ABSTRACT
 

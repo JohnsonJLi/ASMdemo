@@ -12,6 +12,10 @@ import com.johnson.router.routerAct
 @Router("main/activity")
 class MainActivity : AppCompatActivity() {
 
+//    companion object{
+//        val nihao: String = "123"
+//    }
+
     @TimeLog
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

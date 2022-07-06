@@ -4,6 +4,7 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.AppPlugin
 import com.android.build.gradle.LibraryExtension
 import com.johnson.asm.timelog.TimeLogConfig
+import com.kronos.plugin.base.Log
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -19,6 +20,8 @@ class TimeLogPlugin : Plugin<Project> {
             //timeLog
             config.transform()
         }
+        Log.info(">>> TimeLogConfig enable : ${TimeLogConfig.enable} TimeLogConfig filterTime : ${TimeLogConfig.filterTime}")
+        if (!TimeLogConfig.enable) return
         if (isApp) {
             val appExtension = project.extensions.getByType(
                 AppExtension::class.java

@@ -3,7 +3,8 @@ package com.johnson.asm.timelog
 open class TimeLogConfig {
 
     var injectAnnotationName = "com.johnson.asm.common.timelog.TimeLog"
-    var logFilterTime = 16
+    var logFilterTime = 8
+    var enable = false
 
     fun transform() {
         ByteCodeInjectAnnotationName = if (injectAnnotationName.isNullOrEmpty()) {
@@ -12,6 +13,7 @@ open class TimeLogConfig {
             injectAnnotationName.replace(".", "/")
         }
         filterTime = logFilterTime
+        TimeLogConfig.enable = this.enable
     }
 
     companion object {
@@ -21,7 +23,9 @@ open class TimeLogConfig {
 
         //过滤时间
         @JvmField
-        var filterTime = 16
+        var filterTime = 8
 
+        @JvmField
+        var enable = false
     }
 }
